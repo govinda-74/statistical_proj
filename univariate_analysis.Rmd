@@ -1,0 +1,183 @@
+---
+title: "Univariate Analysis of Student Performance Dataset"
+author: "Your Name"
+output:
+  word_document:
+    toc: true
+    toc_depth: '3'
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+  pdf_document:
+    toc: true
+    toc_depth: '3'
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(ggplot2)
+library(dplyr)
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  fig.align = "center",
+  fig.width = 6,
+  fig.height = 4
+)
+
+theme_set(theme_minimal())
+```
+
+# 1. Introduction
+This report presents a univariate analysis of the dataset *student_clean12.csv*, which contains academic performance indicators and socio‑behavioral characteristics of students. The goal is to understand the distribution and patterns of individual variables before moving into deeper statistical modeling.
+
+# 2. Data Loading
+```{r load-data}
+setwd("C:/Users/GODWIN TETTEH/Documents/Statistical Computing Project group G/data")
+data <- read.csv("student_clean12.csv")
+head(data)
+```
+
+# 3. Univariate Analysis
+Each variable is analyzed individually using summary statistics and visualizations. Interpretations follow each plot to explain the observed patterns.
+
+## 3.1 Academic Performance Variables
+
+### 3.1.1 G1 – First Period Grade
+```{r g1}
+summary(data$G1)
+sd(data$G1)
+
+ggplot(data, aes(x = G1)) +
+  geom_histogram(binwidth = 1, fill = "steelblue", color = "black") +
+  labs(title = "Distribution of G1", x = "G1", y = "Frequency")
+```
+**Interpretation:** The distribution of G1 is fairly symmetric, with most students scoring in the mid‑range. There are few extremely low or high scores, suggesting that early academic performance is relatively consistent across the cohort.
+
+### 3.1.2 G2 – Second Period Grade
+```{r g2}
+summary(data$G2)
+sd(data$G2)
+
+ggplot(data, aes(x = G2)) +
+  geom_histogram(binwidth = 1, fill = "darkorange", color = "black") +
+  labs(title = "Distribution of G2", x = "G2", y = "Frequency")
+```
+**Interpretation:** The G2 distribution resembles G1 but shows a slight upward shift. This suggests that many students improve between the first and second grading periods.
+
+### 3.1.3 G3 – Final Grade
+```{r g3}
+summary(data$G3)
+sd(data$G3)
+
+ggplot(data, aes(x = G3)) +
+  geom_histogram(binwidth = 1, fill = "forestgreen", color = "black") +
+  labs(title = "Distribution of G3", x = "G3", y = "Frequency")
+```
+**Interpretation:** Final grades tend to be slightly higher than G1 and G2, indicating overall academic improvement.
+
+## 3.2 Behavioral and Lifestyle Variables
+
+### 3.2.1 Study Time (Ordinal)
+```{r studytime}
+table(data$studytime)
+prop.table(table(data$studytime))
+
+ggplot(data, aes(x = factor(studytime))) +
+  geom_bar(fill = "purple") +
+  labs(title = "Weekly Study Time", x = "Study Time Level", y = "Count")
+```
+**Interpretation:** Most students report low to moderate study time. High study‑time categories are less common.
+
+### 3.2.2 Past Class Failures
+```{r failures}
+summary(data$failures)
+
+ggplot(data, aes(x = failures)) +
+  geom_bar(fill = "brown") +
+  labs(title = "Past Class Failures", x = "Failures", y = "Count")
+```
+**Interpretation:** A large majority of students have zero past failures. Only a small group has multiple failures.
+
+### 3.2.3 Absences
+```{r absences}
+summary(data$absences)
+
+ggplot(data, aes(y = absences)) +
+  geom_boxplot(fill = "lightblue") +
+  labs(title = "Absences", y = "Number of Absences")
+```
+**Interpretation:** Absences are right‑skewed with several outliers. Most students attend regularly.
+
+## 3.3 Parental Education Variables
+
+### 3.3.1 Mother's Education (Medu)
+```{r medu}
+table(data$Medu)
+
+ggplot(data, aes(x = factor(Medu))) +
+  geom_bar(fill = "darkcyan") +
+  labs(title = "Mother's Education Level", x = "Education Level", y = "Count")
+```
+**Interpretation:** Most mothers have low to moderate education levels.
+
+### 3.3.2 Father's Education (Fedu)
+```{r fedu}
+table(data$Fedu)
+
+ggplot(data, aes(x = factor(Fedu))) +
+  geom_bar(fill = "darkred") +
+  labs(title = "Father's Education Level", x = "Education Level", y = "Count")
+```
+**Interpretation:** The distribution mirrors that of mothers' education.
+
+## 3.4 Social and Lifestyle Variables
+
+### 3.4.1 Going Out with Friends (goout)
+```{r goout}
+table(data$goout)
+
+ggplot(data, aes(x = factor(goout))) +
+  geom_bar(fill = "goldenrod") +
+  labs(title = "Going Out with Friends", x = "Frequency Level", y = "Count")
+```
+**Interpretation:** Most students report moderate social activity.
+
+### 3.4.2 Free Time After School (freetime)
+```{r freetime}
+table(data$freetime)
+
+ggplot(data, aes(x = factor(freetime))) +
+  geom_bar(fill = "slateblue") +
+  labs(title = "Free Time After School", x = "Free Time Level", y = "Count")
+```
+**Interpretation:** Free time is fairly evenly distributed.
+
+### 3.4.3 Weekend Alcohol Consumption (Walc)
+```{r walc}
+table(data$Walc)
+
+ggplot(data, aes(x = factor(Walc))) +
+  geom_bar(fill = "firebrick") +
+  labs(title = "Weekend Alcohol Consumption", x = "Consumption Level", y = "Count")
+```
+**Interpretation:** Most students report low to moderate alcohol consumption.
+
+## 3.5 Access to Resources
+
+### 3.5.1 Internet Access at Home
+```{r internet}
+table(data$internet)
+prop.table(table(data$internet))
+
+ggplot(data, aes(x = internet)) +
+  geom_bar(fill = "darkgreen") +
+  labs(title = "Internet Access at Home", x = "Internet Access", y = "Count")
+```
+**Interpretation:** Most students have internet access at home.
+
+# 4. Overall Conclusion
+This univariate analysis reveals several important patterns: academic performance improves over time, most students have few or no past failures, absences show significant outliers, study time is low for many students, parental education levels are modest, social behavior is moderate, and internet access is widespread. These insights provide a strong foundation for further bivariate and multivariate analyses.
